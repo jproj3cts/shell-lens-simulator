@@ -31,13 +31,10 @@ def back_projection(x, y, alpha_0, alpha_in, radius):
 
 def propagate_to_floor(x, y, alpha_0, alpha_in, n_0, n_1):
     a_out = alpha_out(alpha_0, alpha_in, n_0, n_1) - np.pi/2
-    
-    if np.isnan(a_out):
-        return None
-    else:
-        m = np.tan(a_out + np.pi/2 + alpha_0)
-        c = y-m*x
-        x_floor = -c/m
+
+    m = np.tan(a_out + np.pi/2 + alpha_0)
+    c = y-m*x
+    x_floor = -c/m
     return x_floor
 
 def propagate_to_second_surface(x, y, alpha_0, alpha_in, n_0, n_1, radius1, radius2):
@@ -52,8 +49,6 @@ def propagate_to_second_surface(x, y, alpha_0, alpha_in, n_0, n_1, radius1, radi
     y_out = radius2*np.sin(alpha_2)
     
     
-    if y <= radius2 and y_out <= radius2:
-        pass
     if y_out <= 0:
         return None, None
     return x_out, y_out
@@ -64,8 +59,8 @@ n_air = 1
 radius1 = 1
 radius2 = 0.7
 search_radius = 1
-points = 41
-segments = 5
+points = 51
+segments = 10
 
 
 #figure setup
@@ -95,14 +90,17 @@ ax.axis('equal')
 
 linewidth = 2
 
-colors1 = pl.cm.jet(np.linspace(0,1,54))
+min_color = 0.1
+max_color = 0.9
+top = int(points*(alpha_0s[-1] + alpha_ins[-1]/2)/(2*np.pi))
+colors1 = pl.cm.jet(np.linspace(min_color,max_color,top+1))
 for alpha_0 in alpha_0s:
     #PLOT CLOURED CIRCLE
         for alpha_in in alpha_ins:
             x = np.cos(alpha_0)*radius1
             y = np.sin(alpha_0)*radius1
             
-            strand_index = int(points*(alpha_0 + alpha_in/2)/np.pi)
+            strand_index = int(points*(alpha_0 + alpha_in/2)/(2*np.pi))
             
             x_surface, y_surface = back_projection(x, y, alpha_0, alpha_in, radius1)
             ax.plot([x_surface, x], [y_surface, y], color = colors1[strand_index], alpha = 0.3, linewidth = linewidth)
@@ -122,7 +120,7 @@ for alpha_0 in alpha_0s:
 
 #prep color circle
 alpha_0sc = np.linspace((alpha_0s[0] + alpha_ins[0]/2)- np.pi/2, (alpha_0s[-1] + alpha_ins[-1]/2) - np.pi/2,1000) + np.pi/2
-colors = pl.cm.jet(np.linspace(0,1,1000))
+colors = pl.cm.jet(np.linspace(min_color,max_color,1000))
 xs = np.cos(alpha_0sc)*radius1*2.25
 ys = np.sin(alpha_0sc)*radius1*2.25
 ax.scatter(xs, ys , color = colors)
