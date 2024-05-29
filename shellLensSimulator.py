@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-#from pyquibbler import iquib, initialize_quibbler
-#initialize_quibbler()
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -54,30 +52,30 @@ def propagate_to_second_surface(x, y, alpha_0, alpha_in, n_0, n_1, radius1, radi
     return x_out, y_out
 
 
-n_glass = 1.5 # (works for acrylic too since that has a refractive index of 1.49)
+n_glass = 1.5 # (works for acrylic too since that has a refractive index of 1.49).
 n_air = 1
 radius1 = 1
-radius2 = 0.7
-search_radius = 1
+radius2 = 0.5
+search_radius = 2
 points = 51
-segments = 10
+segments = 11
 
 
-#figure setup
+#figure setup.
 fig = plt.figure(figsize=(7, 7))
 ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
 
 
-alpha_ins = np.linspace(-np.pi/2,np.pi/2,segments)
+alpha_ins = np.linspace(-np.pi/3,np.pi/3,segments)
 #alpha_ins = np.linspace(0,0,segments)
 
-#draw circle one
-alpha_0s = np.linspace(0,np.pi/2,points) + np.pi/2
+#draw circle one.
+alpha_0s = np.linspace(-np.pi/2,0,points) + np.pi/2
 xs = np.cos(alpha_0s)*radius1
 ys = np.sqrt(radius1**2-xs**2)
 ax.plot(xs,ys, color = 'black')
 
-#draw circle two
+#draw circle two.
 xs = np.cos(alpha_0s)*radius2
 ys = np.sqrt(radius2**2-xs**2)
 ax.plot(xs,ys, color = 'black')
@@ -125,7 +123,8 @@ xs = np.cos(alpha_0sc)*radius1*2.25
 ys = np.sin(alpha_0sc)*radius1*2.25
 ax.scatter(xs, ys , color = colors)
 
-ax.axhline(y=0,color='k')                
+ax.axhline(y=0,color='k')     
+ax.axvline(x=0, color = 'k')           
 ax.set_xlabel('Horizontal Position')
 ax.set_ylabel('Vertical Position')
 
